@@ -99,7 +99,7 @@ class ApiServices {
 
   async checkOut(cartId: string): Promise<CheckoutResponse> {
     return await fetch(
-      this.#baseUrl + "api/v1/orders/checkout-session/" + cartId + "?url=http://localhost:3000",
+      this.#baseUrl + "api/v1/orders/checkout-session/" + cartId + "?url=https://ecommerce-i16w.vercel.app",
       {
         method: "post",
         body: JSON.stringify({
