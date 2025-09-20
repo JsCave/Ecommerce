@@ -58,10 +58,13 @@ class ApiServices {
   }
 
   async getUserCart(): Promise<GetUserCartResponse> {
+    const isServer = typeof window === "undefined";
+  
     const res = await fetch(this.#baseUrl + "api/v1/cart", {
       headers: this.#getHeaders(),
-      cache: "no-store",        
-      next: { revalidate: 0 },  
+      ...(isServer
+        ? { cache: "no-store", next: { revalidate: 0 } } 
+        : { cache: "no-cache" }),                        
     });
   
     if (!res.ok) {
@@ -70,6 +73,7 @@ class ApiServices {
   
     return res.json();
   }
+  
   
 
   async removeCartProduct(productId: string): Promise<RemoveCartProductResponse> {
