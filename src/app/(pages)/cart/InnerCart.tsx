@@ -40,11 +40,13 @@ useEffect(()=>{
   async function handleClearCart(){
     setisClearingCard(true)
     const response=await apiServices.clearCart()
+    console.log(response)
     toast.success('product removed successful',{
       position: 'bottom-center'
     })
     setisClearingCard(false)
     const newCartData=await apiServices.getUserCart();
+    console.log(newCartData)
     setInnerCartData(newCartData)
   }
 
