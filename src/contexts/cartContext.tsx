@@ -35,12 +35,17 @@ export default function CartContextProvider({ children }: { children: ReactNode 
       const data = await apiServices.addProductToCart(productId)
       setCartCount(data.numOfCartItems)
       toast.success(data.message)
-    } catch (err: any) {
-      toast.error(err?.message || "Failed to add product")
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message)
+      } else {
+        toast.error("Failed to add product")
+      }
     } finally {
       setAddToCartLoading(false)
     }
   }
+  
 
   useEffect(() => {
     getCart()
