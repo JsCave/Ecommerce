@@ -58,10 +58,19 @@ class ApiServices {
   }
 
   async getUserCart(): Promise<GetUserCartResponse> {
-    return await fetch(this.#baseUrl + "api/v1/cart", {
+    const res = await fetch(this.#baseUrl + "api/v1/cart", {
       headers: this.#getHeaders(),
-    }).then((res) => res.json());
+      cache: "no-store",        
+      next: { revalidate: 0 },  
+    });
+  
+    if (!res.ok) {
+      throw new Error("Failed to fetch cart");
+    }
+  
+    return res.json();
   }
+  
 
   async removeCartProduct(productId: string): Promise<RemoveCartProductResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart/" + productId, {
