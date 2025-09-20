@@ -26,7 +26,7 @@ const formSchema = z.object({
   email: z.string(),
  password: z.string(),
 })
-
+type FormValues = z.infer<typeof formSchema>
 export default function ProfileForm() {
 const form=useForm();
 const router=useRouter()
@@ -34,7 +34,7 @@ const searchParams=useSearchParams()
 const callbackURL=searchParams.get('callbackUrl')||'/products'
 const[isSigningIn,setIsSigningIn]=useState(false)
 
-async function onSubmit(values:any){
+async function onSubmit(values:FormValues){
   setIsSigningIn(true)
 console.log(values)
 try{
