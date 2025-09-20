@@ -10,16 +10,16 @@ export default function AllOrders() {
 
 
   async function fetchCart() {
-    const cart = await apiServices.getUserCart();
-    console.log("FULL cart API response:", cart);
-    return cart;
+    const { data } = await apiServices.getUserCart();
+    console.log("cartId:", data);
+    return data.cartOwner;
   }
 
   async function getOrders() {
     const cartId = await fetchCart();
-    //const data: Order[] = await apiServices.getAllOrders(cartId);
-    //console.log("Orders API result:", data);
-    //setOrders(data);
+    const data: Order[] = await apiServices.getAllOrders(cartId);
+    console.log("Orders API result:", data);
+    setOrders(data);
   }
 
   useEffect(() => {
