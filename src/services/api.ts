@@ -123,12 +123,18 @@ class ApiServices {
   }
 
   async getAllOrders(cartId: string): Promise<Order[]> {
-    return await fetch(this.#baseUrl + "api/v1/orders/user/" + cartId ,
-      {
-        next: { revalidate: 60 },
-        cache: "no-cache",
-      }).then((res) => res.json());
+    const res = await fetch(this.#baseUrl + "api/v1/orders/user/" + cartId, {
+      cache: "no-store",        
+      next: { revalidate: 0 },  
+    });
+  
+    if (!res.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+  
+    return res.json();
   }
+  
 
 }
 
