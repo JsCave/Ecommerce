@@ -11,7 +11,7 @@ import { apiServices } from "@/services/api";
 import { BrandCard } from "@/components";
 //https://ecommerce.routemisr.com/api/v1/brands
 
-export default function page() {
+export default function Page() {
 
       const [brands, setBrands] = useState<Brand[]>([]);
       const [loading, setLoading] = useState(false);

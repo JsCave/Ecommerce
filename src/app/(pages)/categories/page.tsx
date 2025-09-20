@@ -12,7 +12,7 @@ import { BrandCard } from "@/components";
 import { CategoryCard } from "@/components/categories";
 //https://ecommerce.routemisr.com/api/v1/brands
 
-export default function page() {
+export default function Page() {
 
       const [categories, setCategories] = useState<Category[]>([]);
       const [loading, setLoading] = useState(false);
