@@ -14,7 +14,6 @@ type CartContextType = {
   ) => Promise<void>
 }
 
-// ✅ remove `| undefined` by forcing a default type
 export const cartContext = createContext<CartContextType>({} as CartContextType)
 
 export default function CartContextProvider({ children }: { children: ReactNode }) {
@@ -48,4 +47,15 @@ export default function CartContextProvider({ children }: { children: ReactNode 
   }, [])
 
   return (
-    <cart
+    <cartContext.Provider
+      value={{
+        cartCount,
+        setCartCount,
+        isLoading,
+        handleAddToCart,
+      }}
+    >
+      {children}
+    </cartContext.Provider>
+  )
+}
