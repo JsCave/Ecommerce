@@ -21,11 +21,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold tracking-tight lg:text-6xl">
           Welcome to TechMart {count}
         </h1>
-        <div className="flex justify-center gap-4">
-          <Button onClick={()=>dispatch(increment())}>+</Button>
-          <Button onClick={()=>dispatch(increase(5))}>++++++</Button>
-          <Button onClick={()=>dispatch(decrement())}>-</Button>
-        </div>
+
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Discover the latest technology, fashion, and lifestyle products.
           Quality guaranteed with fast shipping and excellent customer service.
