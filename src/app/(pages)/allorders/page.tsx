@@ -10,9 +10,9 @@ export default function AllOrders() {
 
 
   async function fetchCart() {
-    const { data } = await apiServices.getUserCart();
-    console.log("cartId:", data);
-    return data.cartOwner;
+    const cart = await apiServices.getUserCart();
+    console.log("FULL cart API response:", cart);
+    return cart;
   }
 
   async function getOrders() {
