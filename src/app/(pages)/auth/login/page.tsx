@@ -35,7 +35,21 @@ export default function LoginPage() {
 
 
   const onSubmit: SubmitHandler<LoginFormValues> = async (values) => {
-    console.log("Login data:", values)
+      setIsSigningIn(true)
+    console.log(values)
+    try{
+      const response=await signIn('credentials',{
+        email:values.email,
+        password:values.password,
+        redirect:false
+      })
+      console.log(response)
+      if(response?.ok){
+        router.push(callbackURL)
+      }
+    }
+    catch(e){console.log(e)}
+    setIsSigningIn(false)
 
   }
 
