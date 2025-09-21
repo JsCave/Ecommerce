@@ -43,7 +43,7 @@ export default function ForgetPassword() {
     try {
       const response = await apiServices.forgetPassword(values.email)
 
-      
+      console.log(response)
       if (response?.statusMsg=='success') {
         router.push('verify')
       }
