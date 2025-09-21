@@ -11,7 +11,7 @@ export default function AllOrders() {
 
   async function getCartId() {
     const  data  = await apiServices.getUserData()
-    console.log("cartId:", data);
+    console.log("cartId:", data.decoded.id);
    // return data.cartOwner;
   }
 
