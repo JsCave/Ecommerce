@@ -21,7 +21,7 @@ import { apiServices } from "@/services/api"
 
 
 const formSchema = z.object({
-  email: z.email("Invalid email address"),
+  code: z.string(),
 })
 
 type LoginFormValues = z.infer<typeof formSchema>
@@ -31,7 +31,7 @@ export default function Verify() {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: ""
+      code: ""
     },
   })
 
@@ -71,12 +71,12 @@ setErrors("An unexpected error occurred");
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="email"
+            name="code"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>Code</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter your email" {...field} />
+                  <Input placeholder="Enter Verification Code" {...field} />
                 </FormControl>
               </FormItem>
             )}
