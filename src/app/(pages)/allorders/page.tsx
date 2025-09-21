@@ -9,17 +9,17 @@ export default function AllOrders() {
   const [loading, setLoading] = useState(false);
 
 
-  async function fetchCart() {
-    const { data } = await apiServices.getUserCart();
+  async function getCartId() {
+    const  data  = await apiServices.getUserData()
     console.log("cartId:", data);
-    return data.cartOwner;
+   // return data.cartOwner;
   }
 
   async function getOrders() {
-    const cartId = await fetchCart();
-    const data: Order[] = await apiServices.getAllOrders(cartId);
-    console.log("Orders API result:", data);
-    setOrders(data);
+    const cartId = await getCartId();
+   // const data: Order[] = await apiServices.getAllOrders(cartId);
+   // console.log("Orders API result:", data);
+  //  setOrders(data);*/
   }
 
   useEffect(() => {

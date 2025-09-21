@@ -7,7 +7,8 @@ import {
   CheckoutResponse,
   LoginResponse,
   BrandResponse,
-  Order
+  Order,
+  VerifyResponse
 } from "@/interfaces";
 import { CategoriesResponse, ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -30,6 +31,15 @@ class ApiServices {
 
   async getAllCategories(): Promise<CategoriesResponse> {
     return await fetch(this.#baseUrl + "api/v1/categories", {
+      next: { revalidate: 60 },
+      cache: "no-cache",
+    }).then((res) => res.json());
+  }
+
+  
+  async getUserData(): Promise<VerifyResponse> {
+    return await fetch(this.#baseUrl + "api/v1/auth/verifyToken", {
+      headers: this.#getHeaders(),
       next: { revalidate: 60 },
       cache: "no-cache",
     }).then((res) => res.json());
@@ -100,6 +110,8 @@ class ApiServices {
       method: "put",
     }).then((res) => res.json());
   }
+
+
 
   async checkOut(cartId: string): Promise<CheckoutResponse> {
     return await fetch(

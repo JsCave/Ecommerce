@@ -10,4 +10,14 @@ export interface LoginResponse {
   }
   
 
+  export interface VerifyResponse {
+    message: string;
+    decoded: {
+      id: string;
+      name: string;
+      role: "user" | "admin" | string;
+      iat: number;
+      exp: number;
+    };
+  }
   
