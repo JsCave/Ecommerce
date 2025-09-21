@@ -50,12 +50,15 @@ const[errors,setErrors]=useState<string>("");
       if (response?.statusMsg=='success') {
         router.push('verify')
       }
+      
+      if (response?.statusMsg=='success') {
+        router.push('verify')
+      }else{
+        setErrors(response.message)
+      }
+
     } catch (e) {
-        if (e instanceof Error) {
-          setErrors(e.message);
-        } else {
-          setErrors("An unexpected error occurred");
-        }
+setErrors("An unexpected error occurred");
       }
     setIsLoading(false)
   }
