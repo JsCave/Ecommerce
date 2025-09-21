@@ -16,10 +16,12 @@ export default function AllOrders() {
   }
 
   async function getOrders() {
+    setLoading(true)
     const cartId = await getCartId();
     const data: Order[] = await apiServices.getAllOrders(cartId);
     console.log("Orders API result:", data);
     setOrders(data);
+    setLoading(false)
   }
 
   useEffect(() => {
