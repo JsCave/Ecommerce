@@ -8,7 +8,8 @@ import {
   LoginResponse,
   BrandResponse,
   Order,
-  VerifyResponse
+  VerifyResponse,
+  ResetCodeResponse
 } from "@/interfaces";
 import { CategoriesResponse, ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -150,6 +151,15 @@ class ApiServices {
   
     return res.json();
   }
+
+  async forgetPassword(email: string): Promise<ResetCodeResponse> {
+    return await fetch(this.#baseUrl + "api/v1/auth/resetPassword", {
+      body: JSON.stringify({ email}),
+      headers: this.#getHeaders(),
+      method: "post",
+    }).then((res) => res.json());
+  }
+
   
 
 }

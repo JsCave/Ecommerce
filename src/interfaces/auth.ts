@@ -21,3 +21,8 @@ export interface LoginResponse {
     };
   }
   
+  export interface ResetCodeResponse {
+    statusMsg: string;  // e.g., "success" | "fail"
+    message: string;    // e.g., "Reset code sent to your email"
+  }
+  
