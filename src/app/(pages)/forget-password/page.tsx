@@ -19,6 +19,7 @@ import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import { apiServices } from "@/services/api"
 
+
 const formSchema = z.object({
   email: z.email("Invalid email address"),
 })
@@ -26,6 +27,7 @@ const formSchema = z.object({
 type LoginFormValues = z.infer<typeof formSchema>
 
 export default function ForgetPassword() {
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,6 +39,7 @@ export default function ForgetPassword() {
  
 
   const [isLoading, setIsLoading] = useState(false)
+const[errors,setErrors]=useState<string>(""); 
 
   async function onSubmit(values: LoginFormValues) {
     setIsLoading(true)
@@ -48,13 +51,18 @@ export default function ForgetPassword() {
         router.push('verify')
       }
     } catch (e) {
-      console.error(e)
-    }
+        if (e instanceof Error) {
+          setErrors(e.message);
+        } else {
+          setErrors("An unexpected error occurred");
+        }
+      }
     setIsLoading(false)
   }
 
   return (
     <div className="max-w-2xl mx-auto my-12">
+        {errors && <div className="bg-red-400 text-red-700">{errors}</div>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -73,7 +81,7 @@ export default function ForgetPassword() {
 
           <Button disabled={isLoading} type="submit" className="w-full">
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Login
+            Reset Password
           </Button>
         </form>
       </Form>
