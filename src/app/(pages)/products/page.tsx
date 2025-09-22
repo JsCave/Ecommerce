@@ -23,8 +23,8 @@ async function fetchProduct(){
   const data:ProductsResponse=await apiServices.getAllProducts()
   setLoading(false)
   setProducts(data.data)
-  console.log("product page"+data)
-  console.log("product page wish list"+wishData)
+  console.log("Products:", data.data)
+  console.log("Wishlist:", wishData.data)
 }
 useEffect(()=>{
   fetchProduct()

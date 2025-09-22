@@ -166,7 +166,8 @@ class ApiServices {
   async getWishList(): Promise<WishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
       headers: this.#getHeaders(),
-      cache: "no-store",
+      next: { revalidate: 60 },
+      cache: "no-cache",
     }).then((res) => res.json());
   }
 
