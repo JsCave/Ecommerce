@@ -11,12 +11,32 @@ import {
   VerifyResponse,
   ResetCodeResponse,
   WishListResponse,
-  AddToWishListResponse
+  AddToWishListResponse,
+  VerifyCodeResponse,
+  ResetResponse,
 } from "@/interfaces";
 import { CategoriesResponse, ProductsResponse, SingleProductResponse } from "@/types";
+import { getSession } from "next-auth/react";
+
+
 
 class ApiServices {
   #baseUrl: string = process.env.NEXT_PUBLIC_API_BASE_URL!;
+
+  async #getHeaders() {
+    const session = await getSession();
+    const token = session?.user?.token;
+
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+
+    if (token) {
+      headers["token"] = token;
+    }
+
+    return headers;
+  }
 
   async getAllProducts(): Promise<ProductsResponse> {
     return await fetch(this.#baseUrl + "api/v1/products", {
@@ -42,7 +62,7 @@ class ApiServices {
   
   async getUserData(): Promise<VerifyResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/verifyToken", {
-      headers: this.#getHeaders(),
+      headers: await this.#getHeaders(),
       next: { revalidate: 60 },
       cache: "no-cache",
     }).then((res) => res.json());
@@ -54,18 +74,19 @@ class ApiServices {
     );
   }
 
-  #getHeaders() {
+  /*async #getHeaders() {
+    const session =  await getSession();
+const token = session?.user?.token;
     return {
       "Content-Type": "application/json",
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yjk1MGYxY2E0NWFiOWY5MWE3OWQwNyIsIm5hbWUiOiJBbGFhIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NTY5NzUzNDYsImV4cCI6MTc2NDc1MTM0Nn0.pFTGtev-la1EW9SvjyCRYXNeY_vivY5sd7mvVveiAD4",
+      token:token,
     };
-  }
+  }*/
 
   async addProductToCart(productId: string): Promise<AddToCartResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart", {
       method: "post",
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       body: JSON.stringify({ productId }),
     }).then((res) => res.json());
   }
@@ -74,7 +95,7 @@ class ApiServices {
     const isServer = typeof window === "undefined";
   
     const res = await fetch(this.#baseUrl + "api/v1/cart", {
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       ...(isServer
         ? { cache: "no-store", next: { revalidate: 0 } } 
         : { cache: "no-cache" }),                        
@@ -91,14 +112,14 @@ class ApiServices {
 
   async removeCartProduct(productId: string): Promise<RemoveCartProductResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart/" + productId, {
-      headers: this.#getHeaders(),
+      headers: await this.#getHeaders(),
       method: "delete",
     }).then((res) => res.json());
   }
 
   async clearCart(): Promise<ClearCartResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart", {
-      headers: this.#getHeaders(),
+      headers: await this.#getHeaders(),
       method: "delete",
     }).then((res) => res.json());
   }
@@ -109,7 +130,7 @@ class ApiServices {
   ): Promise<UpdateCartProductCountResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart/" + productId, {
       body: JSON.stringify({ count }),
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       method: "put",
     }).then((res) => res.json());
   }
@@ -128,7 +149,7 @@ class ApiServices {
             city: "Cairo",
           },
         }),
-        headers: this.#getHeaders(),
+        headers:await this.#getHeaders(),
       }
     ).then((res) => res.json());
   }
@@ -136,7 +157,7 @@ class ApiServices {
   async logIn(email: string, password: string): Promise<LoginResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/signin", {
       body: JSON.stringify({ email, password }),
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       method: "post",
     }).then((res) => res.json());
   }
@@ -157,7 +178,16 @@ class ApiServices {
   async forgetPassword(email: string): Promise<ResetCodeResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/forgotPasswords", {
       body: JSON.stringify({ email}),
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
+      method: "post",
+    }).then((res) => res.json());
+  }
+
+ 
+  async verifyResetCode(resetCode: string): Promise<VerifyCodeResponse> {
+    return await fetch(this.#baseUrl + "api/v1/auth/verifyResetCode", {
+      body: JSON.stringify({ resetCode}),
+      headers:await this.#getHeaders(),
       method: "post",
     }).then((res) => res.json());
   }
@@ -166,7 +196,7 @@ class ApiServices {
 
   async getWishList(): Promise<WishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       next: { revalidate: 60 },
       cache: "no-cache",
     }).then((res) => res.json());
@@ -175,14 +205,14 @@ class ApiServices {
   async addWishList(productId: string): Promise<AddToWishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
       body: JSON.stringify({ productId }),
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       method: "post",
     }).then((res) => res.json());
   }
   
   async deleteWishList(productId: string): Promise<AddToWishListResponse> {
     const res = await fetch(this.#baseUrl + "api/v1/wishlist/" + productId, {
-      headers: this.#getHeaders(),
+      headers:await this.#getHeaders(),
       cache: "no-store",        
       next: { revalidate: 0 },  
       method:'delete'

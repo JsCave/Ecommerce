@@ -26,3 +26,10 @@ export interface LoginResponse {
     message: string;    // e.g., "Reset code sent to your email"
   }
   
+  export interface VerifyCodeResponse {
+    status: string;
+  }
+
+  export interface ResetResponse {
+    token: string;
+  }
