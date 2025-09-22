@@ -45,7 +45,6 @@ const[errors,setErrors]=useState<string>("");
     setIsLoading(true)
     try {
       const response = await apiServices.verifyResetCode(values.code)
-
       console.log(response)
       if (response?.statusMsg=='fail') {
         setErrors(response.message)
