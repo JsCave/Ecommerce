@@ -82,10 +82,11 @@ const {data,status}=useSession()
     "Loading..."
   ) : status === "authenticated" ? (
     <>
+    <Link href="/profile">
       <Button variant="ghost" size="icon">
         HI, {data.user.name}
       </Button>
-
+      </Link>
       {/* Shopping Cart */}
       <Link href="/cart">
         <Button
