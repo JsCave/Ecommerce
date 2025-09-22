@@ -28,7 +28,7 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false,s
   async function addWishList() {
     try {
       setLoading(true);
-  
+      setWishList((prev) => [...prev, product]);
       await apiServices.addWishList(product._id);
 
       const wishData: WishListResponse = await apiServices.getWishList();
