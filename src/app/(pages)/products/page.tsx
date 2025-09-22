@@ -84,9 +84,19 @@ useEffect(()=>{
             : "grid-cols-1"
         }`}
       >
-        {products.map((product) => (
-          <ProductCard key={product._id} product={product} viewMode={viewMode} />
-        ))}
+{products.map((product) => {
+  const isInWishList = wishList.some((item) => item._id === product._id);
+
+  return (
+    <ProductCard
+      key={product._id}
+      product={product}
+      viewMode={viewMode}
+      isInWishList={isInWishList}
+    />
+  );
+})}
+
       </div>
     </div>
   );

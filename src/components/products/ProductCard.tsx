@@ -16,19 +16,14 @@ import { cartContext } from "@/contexts/cartContext";
 interface ProductCardProps {
   product: Product;
   viewMode?: "grid" | "list";
+  isInWishList?: boolean;
 }
 
-export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
+export function ProductCard({ product, viewMode = "grid" ,isInWishList = false}: ProductCardProps) {
   const[addToCartLoading,setAddToCartLoading]=useState(false)
   const{handleAddToCart}=useContext(cartContext)
 
- /* async function handleAddToCart(){
-    setAddToCartLoading(true)
-  const data=await apiServices.addProductToCart(product!._id)
-setCartCount!(data.numOfCartItems)
-  toast.success(data.message)
-  setAddToCartLoading(false)
-  }*/
+
 
 
   if (viewMode === "list") {
@@ -55,8 +50,9 @@ setCartCount!(data.numOfCartItems)
               </Link>
             </h3>
             <Button variant="ghost" size="sm">
-              <Heart className="h-4 w-4" />
-            </Button>
+  <Heart className={`h-4 w-4 ${isInWishList ? "fill-red-500 text-red-500" : "text-gray-500"}`}/>
+</Button>
+
           </div>
 
           <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
@@ -131,7 +127,7 @@ setCartCount!(data.numOfCartItems)
           size="sm"
           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white"
         >
-          <Heart className="h-4 w-4" />
+          <Heart className={`h-4 w-4 ${isInWishList ? "fill-red-500 text-red-500" : "text-gray-500"}`}/>
         </Button>
 
         {/* Badge for sold items */}
