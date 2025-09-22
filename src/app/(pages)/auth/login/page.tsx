@@ -90,14 +90,14 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-
+<Link href='../forget-password'>Forget Password?</Link>
           <Button disabled={isSigningIn} type="submit" className="w-full">
             {isSigningIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Login
           </Button>
         </form>
       </Form>
-      <Link href='forget-password'>Forget Password?</Link>
+      
     </div>
   )
 }
