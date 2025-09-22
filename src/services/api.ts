@@ -174,7 +174,7 @@ class ApiServices {
   }
 
   async resetPassword(email: string,newPassword:string): Promise<ResetCodeResponse> {
-    return await fetch(this.#baseUrl + "api/v1/auth/verifyResetCode", {
+    return await fetch(this.#baseUrl + "api/v1/auth/resetPassword", {
       body: JSON.stringify({ email,newPassword}),
       headers: this.#getHeaders(),
       method: "put",
