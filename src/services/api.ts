@@ -182,6 +182,7 @@ class ApiServices {
   
   async deleteWishList(productId: string): Promise<AddToWishListResponse> {
     const res = await fetch(this.#baseUrl + "api/v1/wishlist/" + productId, {
+      headers: this.#getHeaders(),
       cache: "no-store",        
       next: { revalidate: 0 },  
       method:'delete'
