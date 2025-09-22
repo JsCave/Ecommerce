@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Product } from "@/interfaces";
+import { AddToWishListResponse, Product, WishListResponse } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import { Star, ShoppingCart, Heart } from "lucide-react";
 import { renderStars } from "@/helpers/rating";
@@ -17,13 +17,31 @@ interface ProductCardProps {
   product: Product;
   viewMode?: "grid" | "list";
   isInWishList?: boolean;
+  setWishList: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-export function ProductCard({ product, viewMode = "grid" ,isInWishList = false}: ProductCardProps) {
+export function ProductCard({ product, viewMode = "grid" ,isInWishList = false,setWishList}: ProductCardProps) {
   const[addToCartLoading,setAddToCartLoading]=useState(false)
   const{handleAddToCart}=useContext(cartContext)
+  const[Loading,setLoading]=useState(false)
 
+  async function addWishList() {
+    try {
+      setLoading(true);
+  
+      await apiServices.addWishList(product._id);
 
+      const wishData: WishListResponse = await apiServices.getWishList();
+      setWishList(wishData.data);
+  
+      toast.success("Added to wishlist ❤️");
+    } catch (err) {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  }
+  
 
 
   if (viewMode === "list") {
@@ -49,7 +67,7 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false}:
                 {product.title}
               </Link>
             </h3>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" onClick={addWishList}>
   <Heart className={`h-4 w-4 ${isInWishList ? "fill-red-500 text-red-500" : "text-gray-500"}`}/>
 </Button>
 
@@ -123,6 +141,7 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false}:
 
         {/* Wishlist Button */}
         <Button
+        onClick={addWishList}
           variant="ghost"
           size="sm"
           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-white/80 hover:bg-white"

@@ -27,3 +27,9 @@ export interface WishListResponse {
   count: number;    // number of products
   data: Product[];
 }
+
+export interface AddToWishListResponse {
+  status: string; // e.g. "success"
+  message: string; // e.g. "Product added successfully to your wishlist"
+  data: string[]; // array of product IDs
+}

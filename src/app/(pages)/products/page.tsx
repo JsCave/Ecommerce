@@ -93,6 +93,8 @@ useEffect(()=>{
       product={product}
       viewMode={viewMode}
       isInWishList={isInWishList}
+      setWishList={setWishList}
+
     />
   );
 })}

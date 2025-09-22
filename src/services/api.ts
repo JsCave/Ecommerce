@@ -10,7 +10,8 @@ import {
   Order,
   VerifyResponse,
   ResetCodeResponse,
-  WishListResponse
+  WishListResponse,
+  AddToWishListResponse
 } from "@/interfaces";
 import { CategoriesResponse, ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -171,6 +172,13 @@ class ApiServices {
     }).then((res) => res.json());
   }
 
+  async addWishList(id: string): Promise<AddToWishListResponse> {
+    return await fetch(this.#baseUrl + "api/v1/wishlist", {
+      body: JSON.stringify({ id }),
+      headers: this.#getHeaders(),
+      method: "post",
+    }).then((res) => res.json());
+  }
   
 
 }
