@@ -80,11 +80,11 @@ export default function ResetPassword() {
             name="newPassword"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>New Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Enter your new password"
                     {...field}
                   />
                 </FormControl>
