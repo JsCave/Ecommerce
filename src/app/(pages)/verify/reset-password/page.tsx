@@ -46,9 +46,10 @@ export default function ResetPassword() {
     try {
       const response = await signIn("credentials", {
         email: values.email,
-        password: values.newPassword,
+        newPassword: values.newPassword,
         redirect: false,
       })
+      console.log(response)
       if (response?.ok) {
         router.push(callbackURL)
       }
