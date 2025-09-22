@@ -94,7 +94,7 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-<div><Link href='/auth/register'>Don't Have Account? SignUp</Link></div>
+<div><Link href='/auth/register'>Not Have Account? SignUp</Link></div>
 <div><Link href='/forget-password'>Forget Password?</Link></div>
           <Button disabled={isSigningIn} type="submit" className="w-full">
             {isSigningIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
