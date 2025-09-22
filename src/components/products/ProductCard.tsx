@@ -30,7 +30,7 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false,s
       setLoading(true);
       setWishList((prev) => [...prev, product]);
       const addWishData: AddToWishListResponse = await apiServices.addWishList(product._id);
-console.log('add wish list',addWishList)
+console.log('add wish list',addWishData)
       const wishData: WishListResponse = await apiServices.getWishList();
       setWishList(wishData.data);
   
