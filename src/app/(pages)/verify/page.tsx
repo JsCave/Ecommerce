@@ -44,7 +44,7 @@ const[errors,setErrors]=useState<string>("");
   async function onSubmit(values: LoginFormValues) {
     setIsLoading(true)
     try {
-      const response = await apiServices.forgetPassword(values.email)
+      const response = await apiServices.forgetPassword(values.code)
 
       console.log(response)
       if (response?.statusMsg=='success') {
