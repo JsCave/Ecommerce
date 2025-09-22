@@ -213,6 +213,14 @@ class ApiServices {
     return res.json();
   }
 
+  async register(name:string,email: string, password: string,rePassword:string,phone:string): Promise<LoginResponse> {
+    return await fetch(this.#baseUrl + "api/v1/auth/signup", {
+      body: JSON.stringify({name, email, password, rePassword,phone }),
+      headers:  {"Content-Type": "application/json"},
+      method: "post",
+    }).then((res) => res.json());
+  }
+
 }
 
 export const apiServices = new ApiServices();
