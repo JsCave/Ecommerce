@@ -44,17 +44,14 @@ const[errors,setErrors]=useState<string>("");
   async function onSubmit(values: LoginFormValues) {
     setIsLoading(true)
     try {
-      const response = await apiServices.forgetPassword(values.code)
+      const response = await apiServices.verifyResetCode(values.code)
 
       console.log(response)
-      if (response?.statusMsg=='success') {
-        router.push('verify')
+      if (response?.status=='Success') {
+        router.push('verify/reset-password')
       }
-      
-      if (response?.statusMsg=='success') {
-        router.push('verify')
-      }else{
-        setErrors(response.message)
+      else{
+        setErrors(response.status)
       }
 
     } catch (e) {
