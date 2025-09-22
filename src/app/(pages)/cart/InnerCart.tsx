@@ -9,6 +9,7 @@ import { GetUserCartResponse } from '@/interfaces';
 import toast from 'react-hot-toast';
 import { apiServices} from '@/services/api';
 import { cartContext } from '@/contexts/cartContext';
+import { useSession } from 'next-auth/react';
 
 interface InnerCartProps{
   cartData:GetUserCartResponse
@@ -19,6 +20,7 @@ export default function InnerCart({cartData}:InnerCartProps) {
   const [isClearingCard,setisClearingCard]=useState(false)
   const [isCheckOutLoading,setIsCheckOutLoading]=useState(false)
 const{setCartCount}=useContext(cartContext)!
+const {data: session,status}=useSession()
 
 useEffect(()=>{
   setCartCount!(innerCartData.numOfCartItems)
@@ -27,43 +29,47 @@ useEffect(()=>{
  async function handleRemoveCartItem(
   productId:string,
   setIsRemovingProduct:(value:boolean)=>void){
+    if (!session) return;
   setIsRemovingProduct(true)
-    const response=await apiServices.removeCartProduct(productId)
+    const response=await apiServices.removeCartProduct(productId,session.token)
     toast.success('product removed successful',{
       position: 'bottom-center'
     })
     setIsRemovingProduct(false)
-    const newCartData=await apiServices.getUserCart();
+    const newCartData=await apiServices.getUserCart(session.token);
     setInnerCartData(newCartData)
   }
 
   async function handleClearCart(){
+    if (!session) return;
     setisClearingCard(true)
-    const response=await apiServices.clearCart()
+    const response=await apiServices.clearCart(session.token)
     console.log(response)
     toast.success('product removed successful',{
       position: 'bottom-center'
     })
     setisClearingCard(false)
-    const newCartData=await apiServices.getUserCart();
+    const newCartData=await apiServices.getUserCart(session.token);
     console.log(newCartData)
     setInnerCartData(newCartData)
   }
 
   async function handleUpdateProductCartCount(productId:string,count:number){
+    if (!session) return;
     setisClearingCard(true)
-    const response=await apiServices.updateCartProductCount(productId,count)
+    const response=await apiServices.updateCartProductCount(productId,count,session.token)
     toast.success('product Quantity Updated',{
       position: 'bottom-center'
     })
     setisClearingCard(false)
-    const newCartData=await apiServices.getUserCart();
+    const newCartData=await apiServices.getUserCart(session.token);
     setInnerCartData(newCartData)
   }
 
   async function handleCheckOut(){
+    if (!session) return;
     setIsCheckOutLoading(true)
-    const response=await apiServices.checkOut(cartData.cartId)
+    const response=await apiServices.checkOut(cartData.cartId,session.token)
     console.log(response.session.url)
     location.href=response.session.url
     setIsCheckOutLoading(false)

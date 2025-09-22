@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Search, Filter, Grid, List } from "lucide-react";
 import { ProductsResponse } from "@/types";
 import { apiServices } from "@/services/api";
+import { useSession } from "next-auth/react";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -15,20 +16,23 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const {data: session,status}=useSession()
 
 async function fetchProduct(){
   setLoading(true)
-  const wishData:WishListResponse=await apiServices.getWishList()
+  if(status=="authenticated"){
+  const wishData:WishListResponse=await apiServices.getWishList(session.token)
   setWishList(wishData.data)
+  console.log("Wishlist:", wishData.data)
+  }
   const data:ProductsResponse=await apiServices.getAllProducts()
   setLoading(false)
   setProducts(data.data)
   console.log("Products:", data.data)
-  console.log("Wishlist:", wishData.data)
 }
 useEffect(()=>{
   fetchProduct()
-},[])
+},[status])
 
   if (loading && products.length === 0) {
     return <LoadingSpinner />;

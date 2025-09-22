@@ -39,6 +39,7 @@ export default function LoginPage() {
   const searchParams = useSearchParams()
   const callbackURL = searchParams.get("callbackUrl") || "/products"
   const [isSigningIn, setIsSigningIn] = useState(false)
+  const[errors,setErrors]=useState<string>(""); 
 
   async function onSubmit(values: LoginFormValues) {
     setIsSigningIn(true)
@@ -50,15 +51,18 @@ export default function LoginPage() {
       })
       if (response?.ok) {
         router.push(callbackURL)
+      }else{
+        setErrors('email or password wrong')
       }
     } catch (e) {
-      console.error(e)
+      setErrors('we facing issue now we working on fix it')
     }
     setIsSigningIn(false)
   }
 
   return (
     <div className="max-w-2xl mx-auto my-12">
+{errors && <div className="bg-red-400 text-red-700">{errors}</div>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField

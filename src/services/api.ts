@@ -42,9 +42,9 @@ class ApiServices {
   }
 
   
-  async getUserData(): Promise<VerifyResponse> {
+  async getUserData(token:string): Promise<VerifyResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/verifyToken", {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       next: { revalidate: 60 },
       cache: "no-cache",
     }).then((res) => res.json());
@@ -56,27 +56,26 @@ class ApiServices {
     );
   }
 
-  #getHeaders() {
+  #getHeaders(token:string) {
     return {
       "Content-Type": "application/json",
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4Yjk1MGYxY2E0NWFiOWY5MWE3OWQwNyIsIm5hbWUiOiJBbGFhIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NTY5NzUzNDYsImV4cCI6MTc2NDc1MTM0Nn0.pFTGtev-la1EW9SvjyCRYXNeY_vivY5sd7mvVveiAD4",
+      ...(token ? { token } : {}),
     };
   }
 
-  async addProductToCart(productId: string): Promise<AddToCartResponse> {
+  async addProductToCart(productId: string,token:string): Promise<AddToCartResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart", {
       method: "post",
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       body: JSON.stringify({ productId }),
     }).then((res) => res.json());
   }
 
-  async getUserCart(): Promise<GetUserCartResponse> {
+  async getUserCart(token:string): Promise<GetUserCartResponse> {
     const isServer = typeof window === "undefined";
   
     const res = await fetch(this.#baseUrl + "api/v1/cart", {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       ...(isServer
         ? { cache: "no-store", next: { revalidate: 0 } } 
         : { cache: "no-cache" }),                        
@@ -91,34 +90,35 @@ class ApiServices {
   
   
 
-  async removeCartProduct(productId: string): Promise<RemoveCartProductResponse> {
+  async removeCartProduct(productId: string,token:string): Promise<RemoveCartProductResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart/" + productId, {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       method: "delete",
     }).then((res) => res.json());
   }
 
-  async clearCart(): Promise<ClearCartResponse> {
+  async clearCart(token:string): Promise<ClearCartResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart", {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       method: "delete",
     }).then((res) => res.json());
   }
 
   async updateCartProductCount(
     productId: string,
-    count: number
+    count: number,
+    token:string
   ): Promise<UpdateCartProductCountResponse> {
     return await fetch(this.#baseUrl + "api/v1/cart/" + productId, {
       body: JSON.stringify({ count }),
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       method: "put",
     }).then((res) => res.json());
   }
 
 
 
-  async checkOut(cartId: string): Promise<CheckoutResponse> {
+  async checkOut(cartId: string,token:string): Promise<CheckoutResponse> {
     return await fetch(
       this.#baseUrl + "api/v1/orders/checkout-session/" + cartId + "?url=https://ecommerce-i16w.vercel.app",
       {
@@ -130,7 +130,7 @@ class ApiServices {
             city: "Cairo",
           },
         }),
-        headers: this.#getHeaders(),
+        headers: this.#getHeaders(token),
       }
     ).then((res) => res.json());
   }
@@ -138,7 +138,7 @@ class ApiServices {
   async logIn(email: string, password: string): Promise<LoginResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/signin", {
       body: JSON.stringify({ email, password }),
-      headers: this.#getHeaders(),
+      headers:  {"Content-Type": "application/json"},
       method: "post",
     }).then((res) => res.json());
   }
@@ -159,7 +159,7 @@ class ApiServices {
   async forgetPassword(email: string): Promise<ResetCodeResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/forgotPasswords", {
       body: JSON.stringify({ email}),
-      headers: this.#getHeaders(),
+      headers: {"Content-Type": "application/json"},
       method: "post",
     }).then((res) => res.json());
   }
@@ -168,7 +168,7 @@ class ApiServices {
   async verifyResetCode(resetCode: string): Promise<ResetCodeResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/verifyResetCode", {
       body: JSON.stringify({ resetCode}),
-      headers: this.#getHeaders(),
+      headers: {"Content-Type": "application/json"},
       method: "post",
     }).then((res) => res.json());
   }
@@ -176,31 +176,31 @@ class ApiServices {
   async resetPassword(email: string,newPassword:string): Promise<ResetCodeResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/resetPassword", {
       body: JSON.stringify({ email,newPassword}),
-      headers: this.#getHeaders(),
+      headers: {"Content-Type": "application/json"},
       method: "put",
     }).then((res) => res.json());
   }
 
 
-  async getWishList(): Promise<WishListResponse> {
+  async getWishList(token:string): Promise<WishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       next: { revalidate: 60 },
       cache: "no-cache",
     }).then((res) => res.json());
   }
 
-  async addWishList(productId: string): Promise<AddToWishListResponse> {
+  async addWishList(productId: string,token:string): Promise<AddToWishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
       body: JSON.stringify({ productId }),
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       method: "post",
     }).then((res) => res.json());
   }
   
-  async deleteWishList(productId: string): Promise<AddToWishListResponse> {
+  async deleteWishList(productId: string,token:string): Promise<AddToWishListResponse> {
     const res = await fetch(this.#baseUrl + "api/v1/wishlist/" + productId, {
-      headers: this.#getHeaders(),
+      headers: this.#getHeaders(token),
       cache: "no-store",        
       next: { revalidate: 0 },  
       method:'delete'

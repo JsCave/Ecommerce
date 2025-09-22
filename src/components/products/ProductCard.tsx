@@ -12,6 +12,7 @@ import { useContext, useState } from "react";
 import { apiServices } from "@/services/api";
 import toast from "react-hot-toast";
 import { cartContext } from "@/contexts/cartContext";
+import { useSession } from 'next-auth/react';
 
 interface ProductCardProps {
   product: Product;
@@ -24,22 +25,24 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false,s
   const[addToCartLoading,setAddToCartLoading]=useState(false)
   const{handleAddToCart}=useContext(cartContext)
   const[Loading,setLoading]=useState(false)
+  const {data: session,status}=useSession()
 
   async function addWishList() {
+    if (!session) return;
     try {
       setLoading(true);
       if(!isInWishList){
       setWishList((prev) => [...prev, product]);
-      const addWishData: AddToWishListResponse = await apiServices.addWishList(product._id);
+      const addWishData: AddToWishListResponse = await apiServices.addWishList(product._id,session.token);
       console.log('add wish list',addWishData)
-      const wishData: WishListResponse = await apiServices.getWishList();
+      const wishData: WishListResponse = await apiServices.getWishList(session.token);
       setWishList(wishData.data);
       toast.success("Added to wishlist ❤️");
       }else{
         setWishList((prev) => prev.filter((item) => item._id !== product._id));
-        const deleteWishData: AddToWishListResponse = await apiServices.deleteWishList(product.id);
+        const deleteWishData: AddToWishListResponse = await apiServices.deleteWishList(product.id,session.token);
         console.log('delte wish list',deleteWishData)
-        const wishData: WishListResponse = await apiServices.getWishList();
+        const wishData: WishListResponse = await apiServices.getWishList(session.token);
         setWishList(wishData.data);
         toast.success("Deleted from wishlist 💔");
 

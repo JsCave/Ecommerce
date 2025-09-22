@@ -2,35 +2,39 @@
 import { LoadingSpinner } from "@/components";
 import { Order } from "@/interfaces";
 import { apiServices } from "@/services/api";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 export default function AllOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+const {data: session,status}=useSession()
+
 
 
   async function getCartId() {
-    const  data  = await apiServices.getUserData()
-    console.log("cartId:", data);
+    if (!session) return;
+    const  data  = await apiServices.getUserData(session.token)
+    //console.log("cartId:", data);
     return data.decoded.id;
   }
 
   async function getOrders() {
+    if(status=='authenticated'){
     setLoading(true)
     const cartId = await getCartId();
-    const data: Order[] = await apiServices.getAllOrders(cartId);
+    const data: Order[] = await apiServices.getAllOrders(cartId!);
     console.log("Orders API result:", data);
     setOrders(data);
     setLoading(false)
+    }
   }
+
 
   useEffect(() => {
     getOrders();
-  }, []);
-
-  useEffect(() => {
     console.log("Updated orders state:", orders);
-  }, [orders]);
+  }, [status]);
 
   if (loading && orders.length === 0) {
     return <LoadingSpinner />;
