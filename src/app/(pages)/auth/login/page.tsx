@@ -17,6 +17,7 @@ import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
+import Link from "next/link"
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -96,6 +97,7 @@ export default function LoginPage() {
           </Button>
         </form>
       </Form>
+      <Link href='forget-password'>Forget Password?</Link>
     </div>
   )
 }
