@@ -9,7 +9,8 @@ import {
   BrandResponse,
   Order,
   VerifyResponse,
-  ResetCodeResponse
+  ResetCodeResponse,
+  WishListResponse
 } from "@/interfaces";
 import { CategoriesResponse, ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -157,6 +158,16 @@ class ApiServices {
       body: JSON.stringify({ email}),
       headers: this.#getHeaders(),
       method: "post",
+    }).then((res) => res.json());
+  }
+
+
+
+  async getWishList(): Promise<WishListResponse> {
+    return await fetch(this.#baseUrl + "api/v1/wishlist", {
+      headers: this.#getHeaders(),
+      next: { revalidate: 60 },
+      cache: "no-cache",
     }).then((res) => res.json());
   }
 

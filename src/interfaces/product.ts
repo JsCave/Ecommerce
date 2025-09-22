@@ -20,3 +20,10 @@ export interface Product {
   createdAt: string;
   updatedAt: string;
 }
+
+
+export interface WishListResponse {
+  status: string;   // "success"
+  count: number;    // number of products
+  data: Product[];
+}

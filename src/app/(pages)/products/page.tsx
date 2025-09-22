@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Product } from "@/interfaces";
+import { Product, WishListResponse } from "@/interfaces";
 import { ProductCard } from "@/components/products/ProductCard";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 import { Button } from "@/components/ui/button";
@@ -11,16 +11,20 @@ import { apiServices } from "@/services/api";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [wishList,setWishList]= useState<Product[]>([])
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
 async function fetchProduct(){
   setLoading(true)
+  const wishData:WishListResponse=await apiServices.getWishList()
+  setWishList(wishData.data)
   const data:ProductsResponse=await apiServices.getAllProducts()
   setLoading(false)
   setProducts(data.data)
-  console.log(data)
+  console.log("product page"+data)
+  console.log("product page wish list"+wishData)
 }
 useEffect(()=>{
   fetchProduct()
