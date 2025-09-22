@@ -23,8 +23,8 @@ const{cartCount,isLoading}=useContext(cartContext)!
 //const {count}=useSelector((state:any)=>state.counter)
 const {data,status}=useSession()
 
-console.log(data)
-console.log(status)
+//console.log(data)
+//console.log(status)
   const navItems = [
     { href: "/products", label: "Products" },
     { href: "/brands", label: "Brands" },
