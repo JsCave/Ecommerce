@@ -172,9 +172,9 @@ class ApiServices {
     }).then((res) => res.json());
   }
 
-  async addWishList(id: string): Promise<AddToWishListResponse> {
+  async addWishList(productId: string): Promise<AddToWishListResponse> {
     return await fetch(this.#baseUrl + "api/v1/wishlist", {
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ productId }),
       headers: this.#getHeaders(),
       method: "post",
     }).then((res) => res.json());
