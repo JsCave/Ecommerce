@@ -18,10 +18,11 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
+import { apiServices } from "@/services/api"
 
 
 const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   newPassword: z.string().min(6, "Password must be at least 6 characters"),
 })
 
@@ -38,20 +39,17 @@ export default function ResetPassword() {
 
   const router = useRouter()
   const searchParams = useSearchParams()
-  const callbackURL = searchParams.get("callbackUrl") || "/products"
   const [isSigningIn, setIsSigningIn] = useState(false)
-
+  const[errors,setErrors]=useState<string>(""); 
   async function onSubmit(values: LoginFormValues) {
     setIsSigningIn(true)
     try {
-      const response = await signIn("credentials", {
-        email: values.email,
-        newPassword: values.newPassword,
-        redirect: false,
-      })
+      const response = await apiServices.resetPassword(values.email,values.newPassword)
       console.log(response)
-      if (response?.ok) {
-        router.push(callbackURL)
+      if (response?.statusMsg=="fail") {
+        setErrors(response.message)
+      }else{
+        router.push('auth/login')
       }
     } catch (e) {
       console.error(e)
@@ -61,6 +59,7 @@ export default function ResetPassword() {
 
   return (
     <div className="max-w-2xl mx-auto my-12">
+      {errors && <div className="bg-red-400 text-red-700">{errors}</div>}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
