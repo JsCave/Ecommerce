@@ -49,7 +49,7 @@ export default function ResetPassword() {
       if (response?.statusMsg=="fail") {
         setErrors(response.message)
       }else{
-        router.push('auth/login')
+        router.push('/auth/login')
       }
     } catch (e) {
       console.error(e)
