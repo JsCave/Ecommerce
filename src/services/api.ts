@@ -180,6 +180,19 @@ class ApiServices {
     }).then((res) => res.json());
   }
   
+  async deleteWishList(productId: string): Promise<AddToWishListResponse> {
+    const res = await fetch(this.#baseUrl + "api/v1/wishlist/" + productId, {
+      cache: "no-store",        
+      next: { revalidate: 0 },  
+      method:'delete'
+    });
+  
+    if (!res.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+  
+    return res.json();
+  }
 
 }
 

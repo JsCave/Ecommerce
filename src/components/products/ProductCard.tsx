@@ -28,13 +28,23 @@ export function ProductCard({ product, viewMode = "grid" ,isInWishList = false,s
   async function addWishList() {
     try {
       setLoading(true);
+      if(!isInWishList){
       setWishList((prev) => [...prev, product]);
-      const addWishData: AddToWishListResponse = await apiServices.addWishList(product.id);
-console.log('add wish list',addWishData)
+      const addWishData: AddToWishListResponse = await apiServices.addWishList(product._id);
+      console.log('add wish list',addWishData)
       const wishData: WishListResponse = await apiServices.getWishList();
       setWishList(wishData.data);
-  
       toast.success("Added to wishlist ❤️");
+      }else{
+        setWishList((prev) => prev.filter((item) => item._id !== product._id));
+        const deleteWishData: AddToWishListResponse = await apiServices.deleteWishList(product.id);
+        console.log('delte wish list',deleteWishData)
+        const wishData: WishListResponse = await apiServices.getWishList();
+        setWishList(wishData.data);
+        toast.success("Deleted from wishlist 💔");
+
+      }
+
     } catch (err) {
       toast.error("Something went wrong");
     } finally {
