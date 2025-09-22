@@ -47,11 +47,11 @@ const[errors,setErrors]=useState<string>("");
       const response = await apiServices.verifyResetCode(values.code)
 
       console.log(response)
-      if (response?.status=='Success') {
-        router.push('verify/reset-password')
+      if (response?.statusMsg=='fail') {
+        setErrors(response.message)
       }
       else{
-        setErrors(response.status)
+        router.push('verify/reset-password')
       }
 
     } catch (e) {

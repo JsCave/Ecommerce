@@ -165,7 +165,7 @@ class ApiServices {
   }
 
  
-  async verifyResetCode(resetCode: string): Promise<VerifyCodeResponse> {
+  async verifyResetCode(resetCode: string): Promise<ResetCodeResponse> {
     return await fetch(this.#baseUrl + "api/v1/auth/verifyResetCode", {
       body: JSON.stringify({ resetCode}),
       headers: this.#getHeaders(),
